@@ -140,7 +140,7 @@ def register():
             return redirect(url_for('login'))
         new_user = User(
             email=form.email.data,
-            password=generate_password_hash(password=form.password.data, method="pbkdf2", salt_length=8),
+            password=generate_password_hash(password=form.password.data, method="pbkdf2:sha256", salt_length=8),
             name=form.name.data
         )
         db.session.add(new_user)
