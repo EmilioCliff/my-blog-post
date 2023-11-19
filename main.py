@@ -1,5 +1,5 @@
 from datetime import date
-from flask import Flask, abort, render_template, redirect, url_for, flash
+from flask import Flask, abort, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask_gravatar import Gravatar
@@ -9,6 +9,7 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from forms import RegisterForm, LoginForm, CommentForm, CreatePostForm
+import smtplib
 from sqlalchemy import ForeignKey
 import os
 
@@ -24,6 +25,8 @@ pip3 install -r requirements.txt
 
 This will install the packages from the requirements.txt for this project.
 '''
+my_email = os.environ.get('EMAIL')
+my_password = os.environ.get('PASSWORD')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -263,9 +266,20 @@ def about():
     return render_template("about.html", current_user=current_user)
 
 
-@app.route("/contact")
+@app.route("/contact", methods=['GET', 'POST'])
 def contact():
-    return render_template("contact.html", current_user=current_user)
+    msgsent = False
+    if request.method == 'POST':
+        user_email = request.form['email']
+        user_message = request.form['message']
+        user_name = request.form['name']
+        user_phone_number = request.form['phone']
+        with smtplib.SMTP("smtp.gmail.com") as connection:
+            connection.starttls()
+            connection.login(user=my_email, password=my_password)
+            connection.sendmail(from_addr=my_email, to_addrs=my_email, msg=f"{user_name} of phone number {user_phone_number} and email {user_email} reached out\n\n{user_message}")
+        msgsent = True
+    return render_template("contact.html", current_user=current_user, msg_sent=msgsent)
 
 
 if __name__ == "__main__":
