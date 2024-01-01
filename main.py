@@ -25,9 +25,15 @@ pip3 install -r requirements.txt
 
 This will install the packages from the requirements.txt for this project.
 '''
-my_email = os.environ.get('EMAIL')
-my_password = os.environ.get('PASSWORD')
 
+def send_response(user_name, user_email, user_phone_number, user_message):
+    my_email = os.environ.get('EMAIL')
+    my_password = os.environ.get('PASSWORD')
+    with smtplib.SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login(user=my_email, password=my_password)
+        connection.sendmail(from_addr=my_email, to_addrs='emiliocliff@gmail.com',
+                            msg=f"{user_name} of phone number {user_phone_number} and email {user_email} reached out\n\n{user_message}")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
@@ -274,10 +280,7 @@ def contact():
         user_message = request.form['message']
         user_name = request.form['name']
         user_phone_number = request.form['phone']
-        with smtplib.SMTP("smtp.gmail.com") as connection:
-            connection.starttls()
-            connection.login(user=my_email, password=my_password)
-            connection.sendmail(from_addr=my_email, to_addrs=my_email, msg=f"{user_name} of phone number {user_phone_number} and email {user_email} reached out\n\n{user_message}")
+        send_response(user_name, user_email, user_phone_number, user_message)
         msgsent = True
     return render_template("contact.html", current_user=current_user, msg_sent=msgsent)
 
