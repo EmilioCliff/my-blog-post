@@ -12,6 +12,7 @@ from forms import RegisterForm, LoginForm, CommentForm, CreatePostForm
 import smtplib
 from sqlalchemy import ForeignKey
 import os
+import requests
 
 '''
 Make sure the required packages are installed: 
@@ -27,13 +28,21 @@ This will install the packages from the requirements.txt for this project.
 '''
 
 def send_response(user_name, user_email, user_phone_number, user_message):
-    my_email = os.environ.get('EMAIL')
-    my_password = os.environ.get('PASSWORD')
-    with smtplib.SMTP("smtp.gmail.com") as connection:
-        connection.starttls()
-        connection.login(user=my_email, password=my_password)
-        connection.sendmail(from_addr=my_email, to_addrs='emiliocliff@gmail.com',
-                            msg=f"{user_name} of phone number {user_phone_number} and email {user_email} reached out\n\n{user_message}")
+    domain = os.environ.get('DOMAIN')
+    api_key = os.environ.get('APIKEY')
+    mailgun_url = f"https://api.mailgun.net/v3/{domain}/messages"
+    response = requests.post(
+        mailgun_url, 
+        auth=("api", api_key), 
+        data={
+            "from": f"cliff <mailgun@{domain}>", 
+            "to": ["clifftest33@gmail.com"], 
+            "subject": "User Feedback", 
+            "text": f"{user_name} of phone number {user_phone_number} and email {user_email} reached out\n\n{user_message}"
+            }
+        )
+    # print(response.text)
+   
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
