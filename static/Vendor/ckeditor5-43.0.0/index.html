@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CKEditor 5 - Quick start ZIP</title>
+		<link rel="stylesheet" href="./ckeditor5/ckeditor5.css">
+        <link rel="stylesheet" href="../highlight/styles/default.min.css">
+        <style>
+            .main-container {
+                width: 795px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main-container">
+            <div id="editor">
+                <p>Hello from CKEditor 5!</p>
+            </div>
+		</div>
+        <script src="../highlight/highlight.min.js"></script>
+        <script src="../highlight/languages/go.min.js"></script>
+		<script type="importmap">
+			{
+				"imports": {
+					"ckeditor5": "./ckeditor5/ckeditor5.js",
+					"ckeditor5/": "./ckeditor5/"
+				}
+			}
+		</script>
+        <script type="module">
+            import {
+                ClassicEditor,
+                Essentials,
+                Paragraph,
+                Bold,
+                Italic,
+                Font, 
+                Indent,
+                IndentBlock,
+                BlockQuote, 
+                Link, 
+                List, 
+                Heading,
+                CodeBlock,
+                Code
+            } from 'ckeditor5';
+
+            ClassicEditor
+                .create( document.querySelector( '#editor' ), {
+                    plugins: [ Essentials, Paragraph, Bold, Italic, Font, Indent, IndentBlock, BlockQuote, Link, List, Heading, ClassicEditor, CodeBlock, Code ],
+                    toolbar: [
+						'undo', 'redo', '|', 'bold', 'italic', '|', 'heading',
+						'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
+                        'indent', 'outdent', '|', 'blockQuote', 'numberedList', 'bulletedList', 
+                        'code', 'codeBlock'
+					],
+                    heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+            ]
+        },
+        codeBlock: {
+            languages: [
+                { language: 'css', label: 'CSS' },
+                { language: 'html', label: 'HTML' },
+                { language: 'go', label: 'Go', class: 'language-go' }
+            ]
+        },
+        fontFamily: {
+            options: [
+                'default',
+                'Ubuntu, Arial, sans-serif',
+                'Ubuntu Mono, Courier New, Courier, monospace'
+            ]
+        },
+        fontColor: {
+            colorPicker: {
+                // Use 'hex' format for output instead of 'hsl'.
+                format: 'hex'
+            }
+        },
+                } )
+                .then( editor => {
+                    window.editor = editor;
+                    // hljs.highlightAll();
+                    document.querySelectorAll('pre code').forEach(block => {
+                hljs.highlightBlock(block);
+            });
+
+            // Apply highlight.js after every content change
+            editor.model.document.on('change:data', () => {
+                document.querySelectorAll('pre code').forEach(block => {
+                    hljs.highlightBlock(block);
+                });
+            });
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
+        </script>
+        <!-- A friendly reminder to run on a server, remove this during the integration. -->
+        <script>
+		        window.onload = function() {
+		            if ( window.location.protocol === "file:" ) {
+		                alert( "This sample requires an HTTP server. Please serve this file with a web server." );
+		            }
+		        };
+		</script>
+    </body>
+</html>
+

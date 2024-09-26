@@ -1,7 +1,6 @@
 {% from "bootstrap5/form.html" import render_form %} {% block content %} {%
 include "header.html" %}
 
-<!-- Page Header -->
 <header
   class="masthead"
   style="background-image: url('../static/assets/img/edit-bg.jpg')"
@@ -28,11 +27,20 @@ include "header.html" %}
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
-        {{ ckeditor.load() }}
-        {{ ckeditor.config(name='body') }}
-        {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+        {{ render_form(form) }}
       </div>
     </div>
   </div>
 </main>
+<script src="../static/Vendor/highlight/highlight.min.js"></script>
+<script src="../static/Vendor/highlight/languages/go.min.js"></script>
+<script type="importmap">
+  {
+    "imports": {
+      "ckeditor5": "../static/Vendor/ckeditor5-43.0.0/ckeditor5/ckeditor5.js",
+      "ckeditor5/": "../static/Vendor/ckeditor5-43.0.0/ckeditor5/"
+    }
+  }
+</script>
+<script src="../static/js/ckeditor.js" type="module"></script>
 {% include "footer.html" %} {% endblock %}

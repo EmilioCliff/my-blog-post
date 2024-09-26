@@ -14,18 +14,6 @@ from sqlalchemy import ForeignKey
 import os
 import requests
 
-'''
-Make sure the required packages are installed: 
-Open the Terminal in PyCharm (bottom left). 
-
-On Windows type:
-python -m pip install -r requirements.txt
-
-On MacOS type:
-pip3 install -r requirements.txt
-
-This will install the packages from the requirements.txt for this project.
-'''
 
 def send_response(user_name, user_email, user_phone_number, user_message):
     domain = os.environ.get('DOMAIN')
@@ -44,11 +32,11 @@ def send_response(user_name, user_email, user_phone_number, user_message):
     # print(response.text)
    
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = "qwdeferreg3455445"
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
-# TODO: Configure Flask-Login
+# Configure Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -73,7 +61,6 @@ gravatar = Gravatar(app,
                     base_url=None)
 
 # CONFIGURE TABLES
-# TODO: Create a User table for all your registered users.
 class BlogPost(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
@@ -114,13 +101,13 @@ with app.app_context():
 # with app.app_context():
 #     # Create a user
 #     new_user = User(
-#         email='user@example.com',
+#         email='user123@example.com',
 #         password=generate_password_hash('password', method='pbkdf2', salt_length=8),
 #         name='John Doe'
 #     )
 #     db.session.add(new_user)
 #     db.session.commit()
-#
+
 #     # Create a blog post for the user
 #     new_post = BlogPost(
 #         title='Sample Blog Post',
@@ -131,7 +118,7 @@ with app.app_context():
 #         author=new_user
 #     )
 #     db.session.add(new_post)
-#     db.session.commit()
+    db.session.commit()
 
 def admin_only(func):
     @wraps(func)
@@ -148,7 +135,7 @@ def test_route():
     return "This is a test route"
 
 
-# TODO: Use Werkzeug to hash the user's password when creating a new user.
+# Use Werkzeug to hash the user's password when creating a new user.
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -168,7 +155,7 @@ def register():
     return render_template("register.html", form=form, current_user=current_user)
 
 
-# TODO: Retrieve a user from the database based on their email. 
+# Retrieve a user from the database based on their email. 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -203,7 +190,7 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
-# TODO: Allow logged-in users to comment on posts
+# Allow logged-in users to comment on posts
 @app.route("/post/<int:post_id>", methods=['POST', 'GET'])
 def show_post(post_id):
     form = CommentForm()
@@ -223,7 +210,7 @@ def show_post(post_id):
     return render_template("post.html", post=requested_post, current_user=current_user, form=form)
 
 
-# TODO: Use a decorator so only an admin user can create a new post
+# Use a decorator so only an admin user can create a new post
 @app.route("/new-post", methods=["GET", "POST"])
 @admin_only
 def add_new_post():
@@ -243,7 +230,7 @@ def add_new_post():
     return render_template("make-post.html", form=form, current_user=current_user)
 
 
-# TODO: Use a decorator so only an admin user can edit a post
+# Use a decorator so only an admin user can edit a post
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 @admin_only
 def edit_post(post_id):
@@ -266,7 +253,7 @@ def edit_post(post_id):
     return render_template("make-post.html", form=edit_form, is_edit=True, current_user=current_user)
 
 
-# TODO: Use a decorator so only an admin user can delete a post
+# Use a decorator so only an admin user can delete a post
 @app.route("/delete/<int:post_id>")
 @admin_only
 def delete_post(post_id):

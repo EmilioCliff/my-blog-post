@@ -2,7 +2,6 @@
 {% block content %}
 {%include "header.html" %}
 
-<!-- Page Header -->
 <header
   class="masthead"
   style="background-image: url('../static/assets/img/login-bg.jpg')"
@@ -29,9 +28,7 @@
       {% endfor %}
       {% endif %}
       {% endwith %}
-<!--       TODO: add a flash message here for users registering twice -->
       <div class="col-lg-8 col-md-10 mx-auto">
-        <!--TODO: render login form here-->
         {{ render_form(form) }}
       </div>
     </div>
